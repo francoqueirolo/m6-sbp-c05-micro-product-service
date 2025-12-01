@@ -10,6 +10,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -34,6 +37,23 @@ public class ProductService {
         log.info("User found: {}", user);
 
         return mapper.toDomainWithUser(productEntity, user);
+    }
+    
+    public List<Product> getAllProducts() {
+        log.info("Obteniendo todos los productos");
+        List<ProductEntity> productEntities = productRepository.findAll();
+        
+        return productEntities.stream()
+            .map(entity -> {
+                try {
+                    User user = userClient.getUserById(entity.getCreatedBy());
+                    return mapper.toDomainWithUser(entity, user);
+                } catch (Exception e) {
+                    log.error("Error al obtener usuario para el producto {}: {}", entity.getId(), e.getMessage());
+                    return mapper.toDomain(entity);
+                }
+            })
+            .collect(Collectors.toList());
     }
 
 }

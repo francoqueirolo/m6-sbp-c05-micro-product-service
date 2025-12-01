@@ -60,9 +60,9 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                sh 'rm -rf m6-sbp-c05-micro-user-service' // remove m6-sbp-c05-micro-product-service
+                sh 'rm -rf m6-sbp-c05-micro-product-service'
                 // Get some code from a GitHub repository
-                sh ' git clone https://github.com/franco/m6-sbp-c05-micro-product-service.git'
+                sh ' git clone https://github.com/francoqueirolo/m6-sbp-c05-micro-product-service.git'
             }
         } // end 'Clone'
         

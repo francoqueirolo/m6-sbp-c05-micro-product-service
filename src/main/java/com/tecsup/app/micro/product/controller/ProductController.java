@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Slf4j
 @AllArgsConstructor
 @RestController
@@ -17,6 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
+
+    @GetMapping
+    public ResponseEntity<List<Product>> getAllProducts() {
+        log.info("Solicitud REST para obtener todos los productos");
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getUserById(@PathVariable Long id) {

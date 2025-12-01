@@ -8,8 +8,8 @@ WORKDIR /app
 # Copy the built JAR file from the target directory to the container
 COPY target/*.jar /app/product-service.jar
 
-# Expose port 8081 for the Product Service
-EXPOSE 8081
+# Expose port 8082 for the Product Service
+EXPOSE 8082
 
 # Define the command to run the User Service
 CMD ["java", "-jar", "/app/product-service.jar"]
