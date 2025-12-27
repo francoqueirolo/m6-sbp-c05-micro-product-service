@@ -1,15 +1,14 @@
-# Dockerfile for Product Service
-# Use Eclipse Temurin JRE 17 as the base image
-FROM eclipse-temurin:17-jre
-
-# Set the working directory inside the container
+FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
 
-# Copy the built JAR file from the target directory to the container
-COPY target/*.jar /app/product-service.jar
+COPY pom.xml .
+COPY src ./src
 
-# Expose port 8082 for the Product Service
+RUN mvn clean package -DskipTests
+
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar product-service.jar
 EXPOSE 8082
-
-# Define the command to run the User Service
-CMD ["java", "-jar", "/app/product-service.jar"]
+ENTRYPOINT ["java", "-Xmx350m", "-jar", "product-service.jar"]
