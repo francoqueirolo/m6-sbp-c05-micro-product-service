@@ -24,7 +24,6 @@ public class ProductService {
 
 
     public Product getUserById(Long id) {
-        // Call PostgreSQL productdb
         ProductEntity productEntity = productRepository.findById(id).orElse(null);
         
         if (productEntity == null) {
@@ -32,7 +31,6 @@ public class ProductService {
             return null;
         }
 
-        // Call microservice user
         User user = userClient.getUserById(productEntity.getCreatedBy());
         log.info("User found: {}", user);
 
@@ -54,6 +52,25 @@ public class ProductService {
                 }
             })
             .collect(Collectors.toList());
+    }
+
+    public Product updateProduct(Long id, Product productDTO) {
+        ProductEntity entity = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + id));
+
+        entity.setName(productDTO.getName());
+        entity.setPrice(productDTO.getPrice());
+
+        ProductEntity updatedEntity = productRepository.save(entity);
+
+        return mapper.toDomain(updatedEntity);
+    }
+
+    public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new RuntimeException("No se pudo eliminar. Producto no encontrado con id: " + id);
+        }
+        productRepository.deleteById(id);
     }
 
 }

@@ -1,11 +1,10 @@
-
-
 spring:
-
   datasource:
-    url: jdbc:postgresql://localhost:5432/productdb
-    username: postgres
-    password: postgres
+    # USAR VARIABLES: Si no existen, usa localhost (para correr desde IntelliJ)
+    # Si existen (inyectadas por Docker), usa las del contenedor.
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/productdb}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
   flyway:
@@ -14,3 +13,12 @@ spring:
     baseline-on-migrate: true
     validate-on-migrate: true
 
+user:
+  service:
+    url: ${USER_SERVICE_URL:http://localhost:8081}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include=mappings:
