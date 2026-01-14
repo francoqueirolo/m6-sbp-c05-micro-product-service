@@ -60,6 +60,8 @@ public class ProductService {
 
         entity.setName(productDTO.getName());
         entity.setPrice(productDTO.getPrice());
+        entity.setStock(productDTO.getStock());
+        entity.setImageUrl(productDTO.getImageUrl());
 
         ProductEntity updatedEntity = productRepository.save(entity);
 
